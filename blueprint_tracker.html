@@ -719,10 +719,53 @@ label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 5px
   <div style="font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin:0 0 8px">This Week</div>
   <div class="grid2" style="margin-bottom:16px" id="weekly-stats-grid"></div>
 
-  <!-- ── Exercise Progression ── -->
+  <!-- ── Body Weight Progress ── -->
   <div class="card" style="margin-bottom:12px">
-    <div class="card-title" style="margin-bottom:2px">Exercise Progression</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Hit max reps on all sets → increase weight next session</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="card-title" style="margin:0">Body Weight</div>
+      <div id="pr-trend" style="font-size:12px;font-weight:700"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+      <div style="text-align:center;background:var(--s3);border-radius:8px;padding:8px">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:2px">Start</div>
+        <div style="font-size:17px;font-weight:800">150<span style="font-size:10px;font-weight:400"> lb</span></div>
+      </div>
+      <div style="text-align:center;background:var(--s3);border-radius:8px;padding:8px">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:2px">Current</div>
+        <div style="font-size:17px;font-weight:800" id="pr-cur">—<span style="font-size:10px;font-weight:400"> lb</span></div>
+      </div>
+      <div style="text-align:center;background:var(--s3);border-radius:8px;padding:8px">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:2px">Goal</div>
+        <div style="font-size:14px;font-weight:800">165–175<span style="font-size:10px;font-weight:400"> lb</span></div>
+      </div>
+    </div>
+    <div style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--dim);margin-bottom:4px">
+        <span>150 lb</span><span style="color:var(--green)">▼ 165 lb</span><span>175 lb</span>
+      </div>
+      <div style="background:var(--s3);border-radius:6px;height:12px;overflow:visible;position:relative">
+        <div style="position:absolute;inset:0;overflow:hidden;border-radius:6px">
+          <div style="height:100%;background:var(--primary);border-radius:6px;transition:width .5s" id="pr-goalbar"></div>
+        </div>
+        <div style="position:absolute;left:60%;top:-3px;bottom:-3px;width:2px;background:var(--green);opacity:.8;border-radius:2px"></div>
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;text-align:center" id="pr-goal-msg"></div>
+    </div>
+    <div style="font-size:12px;color:var(--muted)">7-day avg: <strong id="pr-avg" style="color:var(--text)">—</strong></div>
+    <div id="pr-hint" class="alert ai" style="display:none;margin-top:10px;margin-bottom:0"></div>
+  </div>
+
+  <!-- Chart -->
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-title">30-Day Weight Chart</div>
+    <div class="chart-wrap"><canvas id="wt-chart"></canvas></div>
+    <div class="text-m text-s" style="text-align:center;margin-top:4px" id="pr-chart-msg"></div>
+  </div>
+
+  <!-- ── Lift Progress ── -->
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-title" style="margin-bottom:2px">Lift Progress</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Hit top reps → increase weight next session</div>
     <div class="stabs" id="ex-prog-tabs" style="margin-bottom:8px">
       <div class="stab active" onclick="showExProg('A',this)">Upper A</div>
       <div class="stab" onclick="showExProg('LA',this)">Lower A</div>
@@ -732,105 +775,26 @@ label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 5px
     <div id="ex-prog-body"></div>
   </div>
 
-  <!-- ── Weekly Summary ── -->
-  <div class="card" style="margin-bottom:12px">
-    <div class="card-title" style="margin-bottom:2px">Weekly Summary</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:10px">How each exercise went vs. last time</div>
-    <div class="stabs" id="ws-tabs" style="margin-bottom:8px">
-      <div class="stab active" onclick="showWeeklySummary('A',this)">Upper A</div>
-      <div class="stab" onclick="showWeeklySummary('LA',this)">Lower A</div>
-      <div class="stab" onclick="showWeeklySummary('B',this)">Upper B</div>
-      <div class="stab" onclick="showWeeklySummary('LB',this)">Lower B</div>
-    </div>
-    <div id="ws-body"></div>
-  </div>
-
-  <!-- ── Next Week's Targets ── -->
-  <div class="card" style="margin-bottom:12px">
-    <div class="card-title" style="margin-bottom:2px">Next Week's Targets</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Specific goals for your next session of each workout</div>
-    <div class="stabs" id="nwt-tabs" style="margin-bottom:8px">
-      <div class="stab active" onclick="showNextWeekTargets('A',this)">Upper A</div>
-      <div class="stab" onclick="showNextWeekTargets('LA',this)">Lower A</div>
-      <div class="stab" onclick="showNextWeekTargets('B',this)">Upper B</div>
-      <div class="stab" onclick="showNextWeekTargets('LB',this)">Lower B</div>
-    </div>
-    <div id="nwt-body"></div>
-  </div>
-
-  <!-- Stats -->
-  <div class="grid2" style="margin-bottom:12px">
-    <div class="stat-card">
-      <div class="stat-lbl">Start</div>
-      <div class="stat-val">150<span class="stat-unit"> lb</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-lbl">Goal Range</div>
-      <div class="stat-val" style="font-size:18px">165–175<span class="stat-unit"> lb</span></div>
-      <div class="stat-sub">+8–12 lb muscle</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-lbl">Latest Weight</div>
-      <div class="stat-val" id="pr-cur">—<span class="stat-unit"> lb</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-lbl">7-Day Avg</div>
-      <div class="stat-val" id="pr-avg">—<span class="stat-unit"> lb</span></div>
-      <div class="stat-sub" id="pr-trend" style="font-weight:600"></div>
-    </div>
-  </div>
-
-  <!-- Adjustment hint -->
-  <div id="pr-hint" class="alert ai" style="display:none"></div>
-
-  <!-- Chart -->
-  <div class="card">
-    <div class="card-title">Weight History (30 days)</div>
-    <div class="chart-wrap"><canvas id="wt-chart"></canvas></div>
-    <div class="text-m text-s" style="text-align:center;margin-top:4px" id="pr-chart-msg"></div>
-  </div>
-
   <!-- Log weight -->
-  <div class="card">
+  <div class="card" style="margin-bottom:12px">
     <div class="card-title">Log Weight</div>
     <div class="irow" style="align-items:flex-end">
-      <div class="ig" style="margin:0">
-        <label>Date</label>
-        <input type="date" id="pr-date">
-      </div>
-      <div class="ig" style="margin:0">
-        <label>Weight (lb)</label>
-        <input type="number" id="pr-weight" placeholder="150.0" step="0.1" min="80" max="400">
-      </div>
+      <div class="ig" style="margin:0"><label>Date</label><input type="date" id="pr-date"></div>
+      <div class="ig" style="margin:0"><label>Weight (lb)</label><input type="number" id="pr-weight" placeholder="150.0" step="0.1" min="80" max="400"></div>
     </div>
     <button class="btn btn-primary btn-full mt2" onclick="logWeightProg()">Log Weight</button>
   </div>
 
   <!-- Recent entries -->
-  <div class="card">
+  <div class="card" style="margin-bottom:12px">
     <div class="card-title">Recent Entries</div>
     <div id="pr-log"></div>
-  </div>
-
-  <!-- Nutrition History -->
-  <div class="card">
-    <div class="card-head" style="margin-bottom:10px">
-      <div class="card-title" style="margin:0">Nutrition History</div>
-      <span id="pr-nut-count" style="font-size:11px;color:var(--muted)"></span>
-    </div>
-    <div id="pr-nutrition-log" style="max-height:500px;overflow-y:auto"></div>
-  </div>
-
-  <!-- Timeline -->
-  <div class="card">
-    <div class="card-title">Program Timeline</div>
-    <div id="pr-timeline"></div>
   </div>
 
   <!-- Transfer data -->
   <div class="card" style="border-color:var(--primary)">
     <div class="card-title">📱 Transfer to Phone</div>
-    <div class="text-m mb2" style="color:var(--muted)">Move all your data (including exercise photos) between your computer and phone.</div>
+    <div class="text-m mb2" style="color:var(--muted)">Export your data to use on another device.</div>
     <div style="display:flex;gap:8px">
       <button class="btn btn-primary" style="flex:1" onclick="exportData()">📤 Export</button>
       <button class="btn btn-ghost" style="flex:1" onclick="importData()">📥 Import</button>
@@ -1944,139 +1908,87 @@ function calc7DayAvg(log) {
 }
 
 function renderProgress() {
-  // Coach sections
   document.getElementById('coach-insight-body').innerHTML = renderCoachInsight();
   document.getElementById('weekly-stats-grid').innerHTML  = renderWeeklyStats();
   document.getElementById('ex-prog-body').innerHTML       = buildExProgHTML(currentExProgTab);
-  document.getElementById('ws-body').innerHTML            = buildWeeklySummaryHTML(currentWsTab);
-  document.getElementById('nwt-body').innerHTML           = buildNextWeekTargetsHTML(currentNwtTab);
 
   document.getElementById('pr-date').value = today();
   const log = gs('weight_log', {});
   const entries = Object.entries(log).sort((a,b)=>a[0].localeCompare(b[0]));
   const last = entries[entries.length-1];
+  const curW = last ? parseFloat(last[1]) : null;
 
-  document.getElementById('pr-cur').innerHTML = last ? `${last[1]}<span class="stat-unit"> lb</span>` : `—<span class="stat-unit"> lb</span>`;
+  // Current weight
+  document.getElementById('pr-cur').innerHTML = curW
+    ? `${curW}<span style="font-size:10px;font-weight:400"> lb</span>`
+    : `—<span style="font-size:10px;font-weight:400"> lb</span>`;
+
+  // 7-day avg
   const avg = calc7DayAvg(log);
-  document.getElementById('pr-avg').innerHTML = avg ? `${avg}<span class="stat-unit"> lb</span>` : `—<span class="stat-unit"> lb</span>`;
+  document.getElementById('pr-avg').textContent = avg ? `${avg} lb` : '—';
 
-  // Trend
-  const trendEl = document.getElementById('pr-trend');
-  if (entries.length >= 2) {
-    const old = entries[Math.max(0,entries.length-8)];
-    if (old && last) {
-      const diff = (last[1]-old[1]).toFixed(1);
-      trendEl.textContent = diff>=0 ? `↑ +${diff} lb` : `↓ ${diff} lb`;
-      trendEl.style.color = diff>0 ? 'var(--green)' : 'var(--red)';
+  // Goal progress bar (150 lb = 0%, 175 lb = 100%; goal zone starts at 60%)
+  const goalBarEl = document.getElementById('pr-goalbar');
+  const goalMsgEl = document.getElementById('pr-goal-msg');
+  if (goalBarEl) {
+    if (curW) {
+      const pct = Math.min(100, Math.max(0, (curW - 150) / (175 - 150) * 100));
+      goalBarEl.style.width = pct + '%';
+      const gained = (curW - 150).toFixed(1);
+      const toGoal = Math.max(0, 165 - curW).toFixed(1);
+      goalMsgEl.textContent = +gained > 0
+        ? `+${gained} lb gained · ${toGoal} lb to lower goal`
+        : 'Log your weight to track progress';
+    } else {
+      goalBarEl.style.width = '0%';
+      goalMsgEl.textContent = 'Log your weight to track progress';
     }
   }
 
-  // Adjustment hint
+  // Trend badge
+  const trendEl = document.getElementById('pr-trend');
+  if (trendEl && entries.length >= 2) {
+    const old = entries[Math.max(0, entries.length - 8)];
+    if (old && last) {
+      const diff = (parseFloat(last[1]) - parseFloat(old[1])).toFixed(1);
+      trendEl.textContent = diff >= 0 ? `↑ +${diff} lb` : `↓ ${diff} lb`;
+      trendEl.style.color = diff > 0 ? 'var(--green)' : 'var(--red)';
+    }
+  }
+
+  // Calorie hint
   const hintEl = document.getElementById('pr-hint');
   if (avg && entries.length >= 14) {
-    const oldAvg = calc7DayAvg(Object.fromEntries(entries.slice(-14,-7)));
+    const oldAvg = calc7DayAvg(Object.fromEntries(entries.slice(-14, -7)));
     if (oldAvg) {
-      const weekGain = (parseFloat(avg)-parseFloat(oldAvg)).toFixed(2);
-      hintEl.style.display='flex';
+      const weekGain = (parseFloat(avg) - parseFloat(oldAvg)).toFixed(2);
+      hintEl.style.display = 'flex';
       if (weekGain < 0.25) {
-        hintEl.className='alert aw';
-        hintEl.innerHTML='<span class="alert-icon">📈</span><span>Gaining less than 0.5 lb/week → <strong>add 150–200 kcal/day</strong></span>';
+        hintEl.className = 'alert aw';
+        hintEl.innerHTML = '<span class="alert-icon">📈</span><span>Gaining &lt;0.5 lb/week → <strong>add 150–200 kcal/day</strong></span>';
       } else if (weekGain > 1.3) {
-        hintEl.className='alert aw';
-        hintEl.innerHTML='<span class="alert-icon">⚠️</span><span>Gaining faster than 1.25 lb/week → <strong>trim 150–200 kcal/day</strong></span>';
+        hintEl.className = 'alert aw';
+        hintEl.innerHTML = '<span class="alert-icon">⚠️</span><span>Gaining &gt;1.25 lb/week → <strong>trim 150–200 kcal/day</strong></span>';
       } else {
-        hintEl.className='alert as';
-        hintEl.innerHTML=`<span class="alert-icon">✅</span><span>Gaining ~${weekGain} lb/week — right on target! Keep going.</span>`;
+        hintEl.className = 'alert as';
+        hintEl.innerHTML = `<span class="alert-icon">✅</span><span>~${weekGain} lb/week — right on target!</span>`;
       }
     }
-  } else { hintEl.style.display='none'; }
+  } else { hintEl.style.display = 'none'; }
 
-  // Recent log
+  // Recent log (last 7)
   const logEl = document.getElementById('pr-log');
-  const recent = entries.slice(-14).reverse();
-  if (!recent.length) { logEl.innerHTML='<div class="text-m">No weight logged yet.</div>'; }
+  const recent = entries.slice(-7).reverse();
+  if (!recent.length) { logEl.innerHTML = '<div class="text-m">No weight logged yet.</div>'; }
   else {
-    logEl.innerHTML = recent.map(([date,weight])=>`
+    logEl.innerHTML = recent.map(([date, weight]) => `
       <div class="flex-bet" style="padding:8px 0;border-bottom:1px solid var(--border)">
         <span class="text-m">${new Date(date+'T12:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</span>
         <span style="font-weight:700">${weight} lb</span>
       </div>`).join('');
   }
 
-  // Timeline
-  const week = getWeek();
-  document.getElementById('pr-timeline').innerHTML = PHASES.map(p=>{
-    const isActive = week >= p.wStart && week <= p.wEnd;
-    return `<div class="timeline-item">
-      <div class="tl-bar" style="background:${p.color}"></div>
-      <div class="tl-body">
-        <div class="tl-title">
-          ${p.name}
-          <span class="badge" style="background:rgba(0,0,0,.3);border:1px solid ${p.color};color:${p.color};font-size:10px">Wk ${p.weeks}</span>
-          ${isActive?'<span class="badge bg">CURRENT</span>':''}
-        </div>
-        <div class="tl-desc">${p.desc}</div>
-        <div class="tl-tip">💡 ${p.tip}</div>
-      </div>
-    </div>`;
-  }).join('');
-
   drawChart(entries);
-
-  // Nutrition history — ALL logged days, newest first
-  const nutEl = document.getElementById('pr-nutrition-log');
-  const foodLog = gs('food_log', {});
-  const allDays = Object.entries(foodLog)
-    .filter(([,foods]) => foods && foods.length > 0)
-    .sort((a,b) => b[0].localeCompare(a[0])); // newest first
-
-  const countEl = document.getElementById('pr-nut-count');
-  if (countEl) countEl.textContent = allDays.length ? `${allDays.length} days logged` : '';
-
-  if (!allDays.length) {
-    nutEl.innerHTML = '<div class="text-m">No nutrition logged yet.</div>';
-  } else {
-    const todayStr = today();
-    const yStr = (() => { const d=new Date(); d.setDate(d.getDate()-1); return d.toISOString().slice(0,10); })();
-    nutEl.innerHTML = allDays.map(([key, foods]) => {
-      const totKcal = foods.reduce((a,f) => a+(+f.kcal||0), 0);
-      const totP    = foods.reduce((a,f) => a+(+f.p||0), 0);
-      const totC    = foods.reduce((a,f) => a+(+f.c||0), 0);
-      const totFat  = foods.reduce((a,f) => a+(+f.fat||0), 0);
-      const pct     = Math.min(100, Math.round(totKcal/3200*100));
-      const pColor  = totKcal >= 3500 ? 'var(--green)' : totKcal >= 2500 ? 'var(--yellow)' : 'var(--red)';
-      const label   = key === todayStr ? 'Today' : key === yStr ? 'Yesterday'
-        : new Date(key+'T12:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
-      const proteinOk = totP >= 140;
-      return `
-        <div style="padding:12px 0;border-bottom:1px solid var(--border)">
-          <div class="flex-bet" style="margin-bottom:6px">
-            <span style="font-weight:700;font-size:14px">${label}</span>
-            <span style="font-weight:700;font-size:14px;color:${pColor}">${totKcal} kcal</span>
-          </div>
-          <div class="pbar-wrap" style="margin-bottom:8px">
-            <div class="pbar" style="width:${pct}%;background:${pColor}"></div>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px">
-            <div style="background:var(--s3);border-radius:8px;padding:6px 8px;text-align:center">
-              <div style="font-size:15px;font-weight:700;color:${proteinOk?'var(--green)':'var(--yellow)'}">${totP}g</div>
-              <div style="font-size:10px;color:var(--muted)">Protein</div>
-            </div>
-            <div style="background:var(--s3);border-radius:8px;padding:6px 8px;text-align:center">
-              <div style="font-size:15px;font-weight:700;color:var(--text)">${totC}g</div>
-              <div style="font-size:10px;color:var(--muted)">Carbs</div>
-            </div>
-            <div style="background:var(--s3);border-radius:8px;padding:6px 8px;text-align:center">
-              <div style="font-size:15px;font-weight:700;color:var(--text)">${totFat}g</div>
-              <div style="font-size:10px;color:var(--muted)">Fat</div>
-            </div>
-          </div>
-          <div style="font-size:11px;color:var(--dim);line-height:1.6">
-            ${foods.map(f=>`<span style="display:inline-block;margin-right:8px">• ${f.name} <span style="color:var(--muted)">(${f.kcal} kcal · ${f.p}g P)</span></span>`).join('')}
-          </div>
-        </div>`;
-    }).join('');
-  }
 }
 
 function logWeightProg() {
@@ -2435,85 +2347,108 @@ function renderWeeklyStats() {
 function renderProgram() {
   const week = getWeek();
 
-  // Phases
-  document.getElementById('pg-phases').innerHTML = PHASES.map(p=>{
-    const isActive = week>=p.wStart&&week<=p.wEnd;
-    return `<div class="card" style="border-left:4px solid ${p.color}">
-      <div class="card-head">
-        <div>
-          <div style="font-size:16px;font-weight:800">${p.name} Phase</div>
-          <div class="text-m" style="font-size:11px">Weeks ${p.weeks}</div>
-        </div>
-        ${isActive?'<span class="badge bg">YOU ARE HERE</span>':''}
-      </div>
-      <div style="font-size:13px;margin-bottom:10px">${p.desc}</div>
-      <div class="alert ai" style="margin:0;font-size:12px"><span class="alert-icon">💡</span><span>${p.tip}</span></div>
-    </div>`;
-  }).join('');
-
-  // Nutrition
-  document.getElementById('pg-nutrition').innerHTML = `
+  // Phases — visual stepper
+  const totalWeeks = 24;
+  const progressPct = Math.min(100, Math.max(0, (week - 1) / totalWeeks * 100));
+  document.getElementById('pg-phases').innerHTML = `
     <div class="card">
-      <div class="card-title">Macro Targets</div>
-      <div class="grid3" style="margin-bottom:14px">
-        <div class="stat-card"><div class="stat-lbl">Calories</div><div class="stat-val" style="font-size:18px">3,200</div><div class="stat-sub">~+300 lean bulk surplus</div></div>
-        <div class="stat-card"><div class="stat-lbl">Protein</div><div class="stat-val" style="font-size:18px">165g</div><div class="stat-sub">1.1 g/lb bodyweight</div></div>
-        <div class="stat-card"><div class="stat-lbl">Carbs</div><div class="stat-val" style="font-size:18px">450g</div><div class="stat-sub">Fuel training</div></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div class="card-title" style="margin:0">Program Timeline</div>
+        <span class="badge bg">Week ${week} / 24</span>
       </div>
-    </div>
-    `;
-
-  // Exercises
-  document.getElementById('pg-exercises').innerHTML = Object.entries(WORKOUTS).map(([key,wk])=>`
-    <div class="card">
-      <div class="card-title" style="color:${wk.color}">${wk.emoji} ${wk.name} — ${wk.day}</div>
-      ${wk.exercises.map(ex=>{
-        const tags = ex.tags.map(t=>{
-          if(t==='safe') return '<span class="tag tag-safe">SHOULDER-SAFE</span>';
-          if(t==='prehab') return '<span class="tag tag-pre">PREHAB</span>';
-          if(t==='caution') return '<span class="tag tag-warn">⚠️ CAUTION</span>';
-          return '';
-        }).join('');
-        return `<div class="ex-lib-item">
-          <div style="font-size:14px;font-weight:700;margin-bottom:3px">${ex.name}${tags}</div>
-          <div class="flex-gap" style="margin-bottom:6px;flex-wrap:wrap">
-            <span class="badge bb" style="font-size:10px">${ex.target} · Rest: ${ex.rest}</span>
+      <div style="background:var(--s3);border-radius:6px;height:8px;overflow:hidden;margin-bottom:16px">
+        <div style="width:${progressPct}%;height:100%;background:var(--primary);border-radius:6px;transition:width .5s"></div>
+      </div>
+      ${PHASES.map(p=>{
+        const isActive = week>=p.wStart&&week<=p.wEnd;
+        const isDone   = week>p.wEnd;
+        const barW     = Math.round((p.wEnd-p.wStart+1)/totalWeeks*100);
+        return `<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);opacity:${isDone?'.55':'1'}">
+          <div style="flex-shrink:0;width:4px;align-self:stretch;border-radius:2px;background:${p.color}"></div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
+              <span style="font-weight:700;font-size:13px">${p.name}</span>
+              <span style="font-size:10px;color:var(--muted)">Wk ${p.weeks}</span>
+              ${isActive?'<span class="badge bg" style="font-size:9px">NOW</span>':isDone?'<span style="font-size:10px;color:var(--green)">✓ Done</span>':''}
+            </div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:6px">${p.desc}</div>
+            <div style="background:var(--s3);border-radius:3px;height:4px;overflow:hidden">
+              <div style="width:${barW}%;height:100%;background:${p.color};opacity:.6;border-radius:3px"></div>
+            </div>
           </div>
-          ${exPhotoHTML(ex.id, ex.name, false)}
-          <div style="font-size:12px;color:var(--muted);padding:7px 10px;background:var(--s2);border-radius:6px;border-left:2px solid var(--primary);line-height:1.55">${ex.cue}</div>
         </div>`;
       }).join('')}
+    </div>`;
+
+  // Nutrition — visual macro bars
+  const tgts = gs('targets', TARGETS);
+  const macros = [
+    { name:'Calories', val:tgts.kcal,   unit:'kcal', max:4000, color:'var(--primary)', note:'~+300 surplus' },
+    { name:'Protein',  val:tgts.protein, unit:'g',    max:220,  color:'var(--green)',   note:'1.1 g/lb BW' },
+    { name:'Carbs',    val:450,           unit:'g',    max:600,  color:'var(--yellow)',  note:'Training fuel' },
+    { name:'Fat',      val:80,            unit:'g',    max:120,  color:'#f97316',        note:'Hormones & joints' },
+  ];
+  document.getElementById('pg-nutrition').innerHTML = `
+    <div class="card">
+      <div class="card-title" style="margin-bottom:14px">Daily Macro Targets</div>
+      ${macros.map(m=>`
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+            <span style="font-size:13px;font-weight:600">${m.name}</span>
+            <span style="font-size:15px;font-weight:800;color:${m.color}">${m.val.toLocaleString()} <span style="font-size:11px;font-weight:400;color:var(--muted)">${m.unit}</span></span>
+          </div>
+          <div style="background:var(--s3);border-radius:4px;height:8px;overflow:hidden;margin-bottom:3px">
+            <div style="width:${Math.min(100,m.val/m.max*100)}%;height:100%;background:${m.color};border-radius:4px"></div>
+          </div>
+          <div style="font-size:10px;color:var(--dim)">${m.note}</div>
+        </div>`).join('')}
+    </div>`;
+
+  // Exercises — compact table per workout
+  document.getElementById('pg-exercises').innerHTML = Object.entries(WORKOUTS).map(([key,wk])=>`
+    <div class="card">
+      <div class="card-title" style="color:${wk.color};margin-bottom:10px">${wk.emoji} ${wk.name} <span style="font-size:11px;color:var(--muted);font-weight:400">— ${wk.day}</span></div>
+      ${wk.exercises.map(ex=>{
+        const tag = ex.tags.includes('safe')?'🟢':ex.tags.includes('caution')?'🟡':ex.tags.includes('prehab')?'🔵':'';
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="flex:1;min-width:0">
+            <span style="font-size:13px;font-weight:600">${tag} ${ex.name}</span>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:8px">
+            <div style="font-size:12px;font-weight:700;color:var(--text)">${ex.target}</div>
+            <div style="font-size:10px;color:var(--muted)">Rest ${ex.rest}</div>
+          </div>
+        </div>`;
+      }).join('')}
+      <div style="margin-top:8px;font-size:10px;color:var(--dim)">🟢 shoulder-safe &nbsp;🟡 caution &nbsp;🔵 prehab</div>
     </div>`).join('');
 
-  // Recovery
+  // Recovery — brief bullets
   document.getElementById('pg-recovery').innerHTML = `
     <div class="card">
-      <div class="card-title">💤 Sleep — The Master Lever</div>
-      <div style="font-size:13px;line-height:1.7">
-        Target <strong>7–9 hours</strong> per night. A single night of total sleep deprivation reduces muscle protein synthesis by <strong>18%</strong> (0.072→0.059 %·h⁻¹), drops testosterone 24%, and raises cortisol 21% — Lamon et al. 2021. No surplus or program compensates for chronic short sleep.
+      <div class="card-title" style="margin-bottom:10px">Recovery Rules</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:18px;flex-shrink:0">💤</span>
+          <div><strong style="font-size:13px">Sleep 7–9 hrs</strong><div style="font-size:12px;color:var(--muted)">Sleep deprivation cuts MPS by 18%, drops testosterone 24%. Nothing compensates for this.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:18px;flex-shrink:0">🌡️</span>
+          <div><strong style="font-size:13px">Sauna = recovery tool only</strong><div style="font-size:12px;color:var(--muted)">No proven hypertrophy benefit. Useful for relaxation — don't let it impair sleep.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:18px;flex-shrink:0">🏊</span>
+          <div><strong style="font-size:13px">Pool: kicking/breaststroke only</strong><div style="font-size:12px;color:var(--muted)">Avoid freestyle/backstroke/butterfly overhead strokes until PT-cleared.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:18px;flex-shrink:0">🚫</span>
+          <div><strong style="font-size:13px">Shoulder restrictions</strong><div style="font-size:12px;color:var(--muted)">No behind-neck press/pulldown, upright rows, heavy OHP, deep dips, wide flyes.</div></div>
+        </div>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-title">🌡️ Sauna</div>
-      <div style="font-size:13px;line-height:1.7">
-        Transiently raises GH and triggers heat-shock proteins. <strong>Evidence for meaningful hypertrophy is weak</strong> (2025 SR found no performance benefit vs passive recovery). Treat as a recovery and wellness tool. Hydrate well; don't sauna to the point it impairs sleep.
+      <div class="alert aw" style="margin-top:12px;margin-bottom:0">
+        <span class="alert-icon">⚠️</span>
+        <span style="font-size:12px">Stop any sharp pain, clicking, or instability. See a professional before heavy/overhead work.</span>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-title">🏊 Pool</div>
-      <div style="font-size:13px;line-height:1.7">
-        Excellent low-impact active recovery. <strong style="color:var(--yellow)">⚠️ Avoid overhead swim strokes</strong> (freestyle, backstroke, butterfly) — they drive the shoulder into end-range overhead/abduction-ER positions that aggravate labral/cuff issues. Stick to kicking drills, breaststroke arms, or pool walking until PT-cleared.
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">🚫 Exercises Avoided Until PT Clearance</div>
-      <div style="font-size:13px;line-height:1.7;color:var(--muted)">
-        Behind-the-neck press/pulldown, upright rows, heavy barbell overhead press, deep barbell bench (full ROM), deep dips, wide heavy flyes. All create end-range internal rotation, compression/shear, or the "peel-back" position on the posterior-superior labrum.
-      </div>
-    </div>
-    <div class="alert aw">
-      <span class="alert-icon">⚠️</span>
-      <span><strong>Medical:</strong> Stop any movement causing sharp pain, painful clicking, or instability. A labral tear can worsen with inappropriate loading. Professional evaluation is mandatory before heavy/overhead work.</span>
     </div>`;
 
   // Settings
